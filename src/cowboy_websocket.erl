@@ -454,6 +454,9 @@ websocket_inflate_frame(Data, << 1:1, _:2 >>, true, State) ->
 	{iolist_to_binary(Result), State}.
 
 -spec websocket_unmask(B, mask_key(), B) -> B when B::binary().
+% no processing for zero mask key key
+websocket_unmask(Payload, 0, <<>>) ->
+	Payload;
 websocket_unmask(<<>>, _, Unmasked) ->
 	Unmasked;
 websocket_unmask(<< O:32, Rest/bits >>, MaskKey, Acc) ->
