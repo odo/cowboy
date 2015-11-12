@@ -143,8 +143,8 @@ handler_init(State=#state{env=Env, transport=Transport,
 		{shutdown, Req2} ->
 			cowboy_req:ensure_response(Req2, 400),
 			{ok, Req2, [{result, closed}|Env]};			
-		{shutdown, Req2, Status} ->
-			cowboy_req:ensure_response(Req2, Status),
+		{shutdown, Req2, Status, Body} ->
+			cowboy_req:reply(Status, [], Body, Req2),
 			{ok, Req2, [{result, closed}|Env]}
 	catch Class:Reason ->
 		Stacktrace = erlang:get_stacktrace(),
